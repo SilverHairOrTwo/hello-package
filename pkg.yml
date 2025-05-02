@@ -1,0 +1,28 @@
+name: 'hello' # package name
+
+arch: 'all' # any | all | amd64 | aarch64
+
+version: '2.12' # package version
+
+revision: '1' # equivalent to pkgrel in a PKGBUILD file
+
+description: 'Produces a friendly, familiar greeting.'
+
+makedepends: # packages required for build
+  - 'gcc'
+  - 'git'
+  - 'wget'
+  - 'make'
+
+pull: | # a script to pull any code to be compiled/used in the next few steps
+  wget "https://ftp.gnu.org/gnu/hello/hello-${pkgver}.tar.gz"
+  tar -xf "hello-${pkgver}.tar.gz"
+
+build: | # a script to build the package
+  cd "hello-${pkgver}"
+  ./configure --prefix=/usr
+  make -j"${nproc}"
+
+install: | # a script to install the package
+  cd "hello-${pkgver}"
+  make DESTDIR="${pkgdir}" install
